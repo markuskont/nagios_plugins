@@ -16,12 +16,13 @@ def is_ssd(argv):
     else:
         return False
 
-def check_health(argv):
+def main():
+    status=read_smart()
 
-    ssd=is_ssd(argv)
+    ssd=is_ssd(status)
 
-    life = re.search('Media_Wearout_Indicator\s0x\S*\s*(\d{1,3})', argv, flags=re.MULTILINE|re.IGNORECASE).group(1)
-    faulty_sectors = re.search('Reallocated_Sector_Ct.+(\d+)$', argv, flags=re.MULTILINE|re.IGNORECASE).group(1)
+    life = re.search('Media_Wearout_Indicator\s0x\S*\s*(\d{1,3})', status, flags=re.MULTILINE|re.IGNORECASE).group(1)
+    faulty_sectors = re.search('Reallocated_Sector_Ct.+(\d+)$', status, flags=re.MULTILINE|re.IGNORECASE).group(1)
     #faulty_sectors = 0
 
     if ssd == True:
@@ -39,12 +40,6 @@ def check_health(argv):
             sys.exit(3)
     else:
         print "Not SSD"
-
-
-def main():
-    status=read_smart()
-
-    check_health(status)
 
 if __name__ == "__main__":
     main()
