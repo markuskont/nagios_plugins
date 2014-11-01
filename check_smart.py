@@ -9,18 +9,16 @@ def checksmart():
     return os.popen(cmd).read()
 
 # check if device is HDD or SSD
-def check_disk_type(argv):
+def get_disk_type(argv):
 
-    # DO SHIT HERE
-    devicetype=re.search('Rotation Rate: ', argv)
+    devicetype=re.search('Rotation Rate:.+', argv)
 
-    return devicetype
+    return devicetype.group(0)
 
 def main():
     status=checksmart()
 
-    #print status
-    print check_disk_type(status)
+    print get_disk_type(status)
 
 if __name__ == "__main__":
     main()
