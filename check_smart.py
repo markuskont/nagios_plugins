@@ -24,10 +24,15 @@ def ssd_check_remaining_life(argv):
 
     # if critically low, create alert
 
-    if life < 20:
+    if life < 10:
         print("CRITICAL - %s percent lifetime left" % (life))
-    else:
+        sys.exit(2)
+    elif life > 25:
         print("OK - %s percent lifetime left" % (life))
+        sys.exit(0)
+    else:
+        print("WARNING - %s percent lifetime left" % (life))
+        sys.exit(1)
 
 
 def main():
