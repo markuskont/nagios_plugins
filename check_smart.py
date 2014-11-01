@@ -20,13 +20,23 @@ def disk_type(argv):
     else:
         return "HDD"
 
+def ssd_health_check(argv):
+
+    print "this is SSD"
+
+def hdd_health_check(argv):
+
+    print "this is HDD"
+
 def main():
     status=checksmart()
 
     if disk_type(status) == "SSD":
-        print "this is SSD"
+        ssd_health_check(status)
+
     elif disk_type(status) == "HDD":
-        print "this is HDD"
+        hdd_health_check(status)
+
     else:
         print "Not SSD nor HDD"
 
