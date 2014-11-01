@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys, os
+import sys, os, re
 
 # Simply get all SMART data for device
 def checksmart():
@@ -10,12 +10,16 @@ def checksmart():
 
 # check if device is HDD or SSD
 def check_disk_type(argv):
-    return argv
+
+    # DO SHIT HERE
+    devicetype=re.search('Rotation Rate: ', argv)
+
+    return devicetype
 
 def main():
     status=checksmart()
 
-    print check_disk_type(status)
+    #print check_disk_type(status)
 
 if __name__ == "__main__":
     main()
