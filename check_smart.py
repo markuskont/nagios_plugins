@@ -11,14 +11,16 @@ def read_smart():
 # check if device is HDD or SSD
 def disk_type(argv):
 
-    if re.search('Rotation Rate:\s*Solid\s*State\s*Device', argv):
+    if re.search('Rotation Rate:\s*Solid\s*State\s*Device', argv, re.IGNORECASE):
         return "SSD"
     else:
         return "HDD"
 
 def ssd_check_remaining_life(argv):
 
-    life = re.search('Media_Wearout_Indicator.+\d+', argv)
+    # Media_Wearout_Indicator 0x0032   100   100   000    Old_age   Always       -       0
+
+    life = re.search('Media_Wearout_Indicator.+(\d{1,3})', argv, re.IGNORECASE)
     return life.group()
 
 def main():
