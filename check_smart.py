@@ -9,11 +9,13 @@ def checksmart():
     return status
 
 # check if device is HDD or SSD
-def check_disk_type():
-    print "asd"
+def check_disk_type(argv):
+    return argv
 
 def main():
-    print checksmart()
+    status=checksmart()
+
+    print check_disk_type(status)
 
 if __name__ == "__main__":
     main()
