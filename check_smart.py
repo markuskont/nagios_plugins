@@ -9,12 +9,6 @@ def read_smart():
     return os.popen(cmd).read()
 
 # check if device is HDD or SSD
-def disk_type(argv):
-
-    if re.search('Rotation Rate:\s*Solid\s*State\s*Device', argv, re.IGNORECASE):
-        return "SSD"
-    else:
-        return "HDD"
 
 def is_ssd(argv):
     if re.search('Rotation Rate:\s*Solid\s*State\s*Device', argv, re.IGNORECASE):
