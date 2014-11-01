@@ -11,7 +11,14 @@ def checksmart():
 # check if device is HDD or SSD
 def get_disk_type(argv):
 
-    devicetype=re.search('Rotation Rate:.+', argv)
+    #devicetype=re.search('Rotation Rate:.+', argv)
+    #SSD=re.compile('Rotation Rate:\s*solid\s*state\s*device', re.IGNORECASE)
+    #SSD=re.search('Rotation Rate:.+')
+
+    if re.search('Rotation Rate:\s*Solid\s*State\s*Device', argv):
+        return "SSD"
+    else:
+        return "HDD"
 
     return devicetype.group(0)
 
