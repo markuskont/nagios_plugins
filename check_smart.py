@@ -20,7 +20,7 @@ def main():
     status=checksmart()
 
     #print status
-    #print check_disk_type(status)
+    print check_disk_type(status)
 
 if __name__ == "__main__":
     main()
