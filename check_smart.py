@@ -20,8 +20,6 @@ def disk_type(argv):
     else:
         return "HDD"
 
-    return devicetype.group(0)
-
 def main():
     status=checksmart()
 
