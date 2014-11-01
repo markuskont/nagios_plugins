@@ -17,7 +17,7 @@ def is_ssd(argv):
         return False
 
 def extract_value_by_regex(pattern, data):
-    return re.search(pattern, data, flags=re.MULTILINE|re.IGNORECASE).group(1)
+    return int(re.search(pattern, data, flags=re.MULTILINE|re.IGNORECASE).group(1))
 
 def main():
     status=read_smart()
@@ -27,13 +27,13 @@ def main():
         life = extract_value_by_regex('Media_Wearout_Indicator\s0x\S*\s*(\d{1,3})', status)
         faulty_sectors = extract_value_by_regex('Reallocated_Sector_Ct.+(\d+)$', status)
 
-        if int(life) < 15:
+        if life < 15:
             print("CRITICAL - SSD lifetime alert; %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
             sys.exit(2)
-        elif int(faulty_sectors) > 0:
+        elif faulty_sectors > 0:
             print("WARNING - reallocated sectors; %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
             sys.exit(1)
-        elif int(life) > 40:
+        elif life > 40:
             print("OK - %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
             sys.exit(0)
         else:
