@@ -16,19 +16,21 @@ def disk_type(argv):
     else:
         return "HDD"
 
-def ssd_check_remaining_life(argv):
+def ssd_check_health(argv):
 
     # Media_Wearout_Indicator 0x0032   100   100   000    Old_age   Always       -       0
 
     life = re.search('Media_Wearout_Indicator\s0x\S*\s*(\d{1,3})', argv, flags=re.MULTILINE|re.IGNORECASE).group(1)
     faulty_sectors = re.search('Reallocated_Sector_Ct.+(\d+)$', argv, flags=re.MULTILINE|re.IGNORECASE).group(1)
+    #faulty_sectors = 0
 
-    # if critically low, create alert
-
-    if life < 15:
-        print("CRITICAL - %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
+    if int(life) < 15:
+        print("CRITICAL - SSD lifetime alert; %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
         sys.exit(2)
-    elif life > 30:
+    elif int(faulty_sectors) > 0:
+        print("WARNING - reallocated sectors; %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
+        sys.exit(1)
+    elif int(life) > 30:
         print("OK - %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
         sys.exit(0)
     else:
@@ -40,7 +42,7 @@ def main():
     status=read_smart()
 
     if disk_type(status) == "SSD":
-        ssd_check_remaining_life(status)
+        ssd_check_health(status)
 
     elif disk_type(status) == "HDD":
         print "This is HDD"
