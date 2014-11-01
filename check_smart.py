@@ -16,11 +16,16 @@ def disk_type(argv):
     else:
         return "HDD"
 
+def ssd_check_remaining_life(argv):
+
+    life = re.search('Media_Wearout_Indicator.+\d+', argv)
+    return life.group()
+
 def main():
     status=read_smart()
 
     if disk_type(status) == "SSD":
-        print "This is SSD"
+        print ssd_check_remaining_life(status)
 
     elif disk_type(status) == "HDD":
         print "This is HDD"
