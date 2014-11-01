@@ -20,14 +20,21 @@ def ssd_check_remaining_life(argv):
 
     # Media_Wearout_Indicator 0x0032   100   100   000    Old_age   Always       -       0
 
-    life = re.search('Media_Wearout_Indicator.+(\d{1,3})', argv, re.IGNORECASE)
-    return life.group()
+    life = re.search('Media_Wearout_Indicator\s0x\d+\s*(\d{1,3})', argv, re.IGNORECASE).group(1)
+
+    # if critically low, create alert
+
+    if life < 20:
+        print("CRITICAL - %s percent lifetime left" % (life))
+    else:
+        print("OK - %s percent lifetime left" % (life))
+
 
 def main():
     status=read_smart()
 
     if disk_type(status) == "SSD":
-        print ssd_check_remaining_life(status)
+        ssd_check_remaining_life(status)
 
     elif disk_type(status) == "HDD":
         print "This is HDD"
