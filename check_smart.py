@@ -19,13 +19,11 @@ def is_ssd(argv):
 def main():
     status=read_smart()
 
-    ssd=is_ssd(status)
-
     life = re.search('Media_Wearout_Indicator\s0x\S*\s*(\d{1,3})', status, flags=re.MULTILINE|re.IGNORECASE).group(1)
     faulty_sectors = re.search('Reallocated_Sector_Ct.+(\d+)$', status, flags=re.MULTILINE|re.IGNORECASE).group(1)
     #faulty_sectors = 0
 
-    if ssd == True:
+    if is_ssd(status):
         if int(life) < 15:
             print("CRITICAL - SSD lifetime alert; %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
             sys.exit(2)
