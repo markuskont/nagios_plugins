@@ -21,17 +21,18 @@ def ssd_check_remaining_life(argv):
     # Media_Wearout_Indicator 0x0032   100   100   000    Old_age   Always       -       0
 
     life = re.search('Media_Wearout_Indicator\s0x\S*\s*(\d{1,3})', argv, re.IGNORECASE).group(1)
+    faulty_sectors = re.search('Reallocated_Sector_Ct.+(\d+)$', argv, re.MULTILINE).group(1)
 
     # if critically low, create alert
 
     if life < 15:
-        print("CRITICAL - %s percent lifetime left" % (life))
+        print("CRITICAL - %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
         sys.exit(2)
     elif life > 30:
-        print("OK - %s percent lifetime left" % (life))
+        print("OK - %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
         sys.exit(0)
     else:
-        print("WARNING - %s percent lifetime left" % (life))
+        print("WARNING - %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
         sys.exit(1)
 
 
