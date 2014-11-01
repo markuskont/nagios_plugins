@@ -31,12 +31,12 @@ def check_health(argv):
         elif int(faulty_sectors) > 0:
             print("WARNING - reallocated sectors; %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
             sys.exit(1)
-        elif int(life) > 30:
+        elif int(life) > 40:
             print("OK - %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
             sys.exit(0)
         else:
-            print("WARNING - %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
-            sys.exit(1)
+            print("UNKNOWN - %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
+            sys.exit(3)
     else:
         print "Not SSD"
 
