@@ -16,12 +16,14 @@ def is_ssd(argv):
     else:
         return False
 
+def extract_value_by_regex(pattern, data):
+    return re.search(pattern, data, flags=re.MULTILINE|re.IGNORECASE).group(1)
+
 def main():
     status=read_smart()
 
-    life = re.search('Media_Wearout_Indicator\s0x\S*\s*(\d{1,3})', status, flags=re.MULTILINE|re.IGNORECASE).group(1)
-    faulty_sectors = re.search('Reallocated_Sector_Ct.+(\d+)$', status, flags=re.MULTILINE|re.IGNORECASE).group(1)
-    #faulty_sectors = 0
+    life = extract_value_by_regex('Media_Wearout_Indicator\s0x\S*\s*(\d{1,3})', status)
+    faulty_sectors = extract_value_by_regex('Reallocated_Sector_Ct.+(\d+)$', status)
 
     if is_ssd(status):
         if int(life) < 15:
