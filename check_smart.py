@@ -23,7 +23,12 @@ def disk_type(argv):
 def main():
     status=checksmart()
 
-    print disk_type(status)
+    if disk_type(status) == "SSD":
+        print "this is SSD"
+    elif disk_type(status) == "HDD":
+        print "this is HDD"
+    else:
+        print "Not SSD nor HDD"
 
 if __name__ == "__main__":
     main()
