@@ -13,12 +13,10 @@ def read_smart():
         cmd="& 'C:\Program Files (x86)\smartmontools\bin\smartctl.exe' -a sdb"
 
     else:
-        print "Not suported platform"
+        print "UNKNOWN - Not suported platform"
+        sys.exit(3)
     
-    try:
-        return os.popen(cmd).read()
-    except:
-        print("unablle to execute %s" % (cmd) ) 
+    return os.popen(cmd).read()
 
 # check if device is HDD or SSD
 
