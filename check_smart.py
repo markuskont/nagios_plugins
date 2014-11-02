@@ -50,7 +50,8 @@ def main():
             print("UNKNOWN - %s percent lifetime left; %s reallocated sectors" % (life, faulty_sectors))
             sys.exit(3)
     else:
-        print "Not SSD"
+        print "UNKNOWN - Script only supports SSD checking"
+        sys.exit(3)
 
 if __name__ == "__main__":
     main()
