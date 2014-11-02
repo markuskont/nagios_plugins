@@ -4,9 +4,14 @@ import sys, os, re
 
 # Simply get all SMART data for device
 def read_smart():
-    cmd='sudo smartctl -a /dev/sda'
+
+    if os.name == "posix":
+        cmd='sudo smartctl -a /dev/sda'
     
-    return os.popen(cmd).read()
+    try:
+        return os.popen(cmd).read()
+    except:
+        print ("unablle to execute %s" % (cmd) ) 
 
 # check if device is HDD or SSD
 
