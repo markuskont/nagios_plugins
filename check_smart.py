@@ -7,11 +7,18 @@ def read_smart():
 
     if os.name == "posix":
         cmd='sudo smartctl -a /dev/sda'
+
+    elif os.name == "nt":
+        # Does not work
+        cmd="& 'C:\Program Files (x86)\smartmontools\bin\smartctl.exe' -a sdb"
+
+    else:
+        print "Not suported platform"
     
     try:
         return os.popen(cmd).read()
     except:
-        print ("unablle to execute %s" % (cmd) ) 
+        print("unablle to execute %s" % (cmd) ) 
 
 # check if device is HDD or SSD
 
