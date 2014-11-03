@@ -1,0 +1,13 @@
+#!/bin/bash
+
+service_status=`sudo service bacula status`
+
+if [[ $service_status =~ ([A-Za-z-]+ is stopped) ]]; then
+	echo -n "CRITICAL - " 
+	echo $service_status
+	exit 2
+else
+	echo -n "OK - "
+	echo $service_status
+	exit 0
+fi
