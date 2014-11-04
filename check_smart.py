@@ -36,12 +36,13 @@ def is_rotational():
     fi="/sys/block/sdb/queue/rotational"
 
     if os.path.isfile(fi):
-        data=open(fi, 'r') 
-        if data.read() == 1:
+        data=int(open(fi, 'r').read(1))
+        if data == 1:
             return True
-        elif data.read() == 0:
+        elif data == 0:
             return False
         else:
+	    print data
             print("UNKNOWN - Strange data in %s" % (fi) )
             sys.exit(3)
     else:
