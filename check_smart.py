@@ -6,7 +6,9 @@ import sys, os, re
 def read_smart():
 
     if os.name == "posix":
-        cmd='sudo smartctl -a /dev/sda'
+        # sdX is hardcoded, but could be some other value than sdb
+        # NOTE: read from function arcuments
+        cmd='sudo smartctl -a /dev/sdb'
 
     elif os.name == "nt":
         # Does not work
@@ -23,8 +25,29 @@ def read_smart():
 def is_ssd(argv):
     if re.search('Rotation Rate:\s*Solid\s*State\s*Device', argv, re.IGNORECASE):
         return True
+    elif os.name == "posix" and is_rotational() == False:
+        return True
     else:
         return False
+
+def is_rotational():
+    # sdX is hardcoded, but could be some other value than sdb
+    # NOTE: read from function arcuments
+    fi="/sys/block/sdb/queue/rotational"
+
+    if os.path.isfile(fi):
+        data=open(fi, 'r') 
+        if data.read() == 1:
+            return True
+        elif data.read() == 0:
+            return False
+        else:
+            print("UNKNOWN - Strange data in %s" % (fi) )
+            sys.exit(3)
+    else:
+        print "UNKNOWN - Unable to identify if disk is rotational or not"
+        sys.exit(3)
+
 
 def extract_value_by_regex(pattern, data):
     return int(re.search(pattern, data, flags=re.MULTILINE|re.IGNORECASE).group(1))
