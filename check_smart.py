@@ -1,19 +1,24 @@
 #!/usr/bin/env python
 
-import sys, os, re
+# THIS SCRIPT IS VERY BADLY WRITTEN
+
+import sys, os, re, argparse
+
+def parse_arguments():
+
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-d', '--device', help='Device node definition, e.g sda')
+	args = parser.parse_args()
+
+	return args
 
 # Simply get all SMART data for device
-def read_smart():
+def read_smart(node):
 
     if os.name == "posix":
         # sdX is hardcoded, but could be some other value than sdb
         # NOTE: read from function arcuments
-        cmd='sudo smartctl -a /dev/sdb'
-
-    elif os.name == "nt":
-        # Does not work
-        cmd="& 'C:\Program Files (x86)\smartmontools\bin\smartctl.exe' -a sdb"
-
+        cmd='sudo smartctl -a /dev/' + node
     else:
         print "UNKNOWN - Not suported platform"
         sys.exit(3)
@@ -25,36 +30,21 @@ def read_smart():
 def is_ssd(argv):
     if re.search('Rotation Rate:\s*Solid\s*State\s*Device', argv, re.IGNORECASE):
         return True
-    elif os.name == "posix" and is_rotational() == False:
-        return True
     else:
         return False
-
-def is_rotational():
-    # sdX is hardcoded, but could be some other value than sdb
-    # NOTE: read from function arcuments
-    fi="/sys/block/sdb/queue/rotational"
-
-    if os.path.isfile(fi):
-        data=int(open(fi, 'r').read(1))
-        if data == 1:
-            return True
-        elif data == 0:
-            return False
-        else:
-	    print data
-            print("UNKNOWN - Strange data in %s" % (fi) )
-            sys.exit(3)
-    else:
-        print "UNKNOWN - Unable to identify if disk is rotational or not"
-        sys.exit(3)
-
 
 def extract_value_by_regex(pattern, data):
     return int(re.search(pattern, data, flags=re.MULTILINE|re.IGNORECASE).group(1))
 
 def main():
-    status=read_smart()
+    args = parse_arguments()
+    dev_node = args.device
+
+    if re.match('^sd\w$', dev_node):
+        status=read_smart(dev_node)
+    else:
+        print "Invalid device node. Valid argument format is 'sd\w'"
+        sys.exit(3)
 
     if is_ssd(status):
 
